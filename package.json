@@ -1,7 +1,7 @@
 {
-  "name": "js_project_template",
+  "name": "monthly_bills",
   "version": "1.0.0",
-  "description": "Gulp + Browserify + Babel setup for es2015 front-end development.",
+  "description": "React app for tracking monthly bills.",
   "main": "raw/script.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,5 +14,10 @@
     "gulp": "^3.9.0",
     "gulp-babel": "^6.1.1",
     "vinyl-source-stream": "^1.1.0"
+  },
+  "dependencies": {
+    "babel-preset-react": "^6.11.1",
+    "react": "^15.2.0",
+    "react-dom": "^15.2.0"
   }
 }
