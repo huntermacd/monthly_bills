@@ -20,7 +20,14 @@ let bills = [
   { name: 'Health Insurance, CIGNA', dueDate: 1, autoPay: false, paid: false },
   { name: 'Credit Card, Barclay', dueDate: 3, autoPay: false, paid: false },
   { name: 'Phone, AT&T', dueDate: 4, autoPay: false, paid: false },
-  { name: 'HBO Now', dueDate: 8, autoPay: true, paid: false }
+  { name: 'HBO Now', dueDate: 8, autoPay: true, paid: false },
+  { name: 'Car Payment, Honda', dueDate: 13, autoPay: false, paid: false },
+  { name: 'Credit Card, Capital One', dueDate: 15, autoPay: false, paid: false },
+  { name: 'Internet, XFINITY', dueDate: 16, autoPay: false, paid: false },
+  { name: 'Netflix', dueDate: 16, autoPay: true, paid: false },
+  { name: 'Car Insurance, GEICO', dueDate: 23, autoPay: true, paid: false },
+  { name: 'Renter\'s Insurance, Assurant', dueDate: 23, autoPay: true, paid: false },
+  { name: 'Code School', dueDate: 25, autoPay: true, paid: false }
 ];
 
 // Components
@@ -28,13 +35,6 @@ class BillsList extends React.Component {
   render() {
     // loop through all bills and generate a new array
     // with one of each unique date
-    // let a = bills.map(item => item.dueDate);
-    // let b = new Set(a);
-    // let c = Array.from(b);
-    // console.log(bills);
-    // console.log('a: ', a);
-    // console.log('b: ', b);
-    // console.log('c: ', c);
     let dates = Array.from(new Set(bills.map(item => item.dueDate)));
     return (
       <div className='billsList'>
@@ -42,7 +42,7 @@ class BillsList extends React.Component {
         {
           dates.map(date => {
             return (
-              <DateContainer date={ date } />
+              <DateContainer date={ date } key={`${ date }-container`} />
             )
           })
         }
@@ -53,12 +53,21 @@ class BillsList extends React.Component {
 
 class DateContainer extends React.Component {
   render() {
-    let monthStart = moment().startOf('month');
-    let dueDate = this.props.date - 1;
     return (
       <div className='dateContainer'>
-        <h1>{ bills[0].name }</h1>
-        <Bill name="AT&T" dueDate={ monthStart.add(`${ this.props.date - 1 }`, 'days').format('Do').toString() } />
+        {
+          bills.map(bill => {
+            if (bill.dueDate === this.props.date) {
+              return (
+                <Bill
+                  name={ bill.name }
+                  dueDate={ moment().startOf('month').add(`${ this.props.date - 1 }`, 'days').format('Do').toString() }
+                  key={ `${ bill.name }-bill` }
+                />
+              );
+            }
+          })
+        }
       </div>
     );
   }
@@ -68,8 +77,7 @@ class Bill extends React.Component {
   render() {
     return (
       <div className='bill'>
-        <h2>{ this.props.name }</h2>
-        <p>Due on the { this.props.dueDate }</p>
+        <p>{ this.props.name } due on { this.props.dueDate }</p>
       </div>
     );
   }
