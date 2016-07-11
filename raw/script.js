@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
 
+const db = firebase.database();
+
 /*
 App Layout
 
@@ -29,6 +31,30 @@ let bills = [
   { id: 10, name: 'Renter\'s Insurance, Assurant', dueDate: 23, autoPay: true, paid: false },
   { id: 11, name: 'Code School', dueDate: 25, autoPay: true, paid: false }
 ];
+
+// Utilities
+function slugify(string) {
+  return string
+          .toLowerCase()
+          .replace(/[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g, '')
+          .replace(/ /g, '-');
+}
+
+// console.log(slugify('Renter\'s Insurance, Assurant'));
+
+function addNewBill(autoPay, dueDate, name, paid) {
+  let slugifiedName = slugify(name);
+  db.ref().push({
+    slugifiedName: {
+      autoPay,
+      dueDate,
+      paid
+    }
+  });
+}
+
+// Test addNewBill
+addNewBill(false, 1, 'Rent, Arthur Properties LLC', true);
 
 // Components
 class BillsList extends React.Component {
