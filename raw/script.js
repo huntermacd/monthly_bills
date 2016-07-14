@@ -4,45 +4,9 @@ import moment from 'moment';
 
 const db = firebase.database();
 
-/*
-App Layout
-
-BillsList
-  DateContainer
-    Bill
-    Bill
-  DateContainer
-    Bill
-AddBillForm
-*/
-
-// Bills
-// let bills = [
-//   { id: 0, name: 'Rent, Arthur Properties LLC', dueDate: 1, autoPay: false, paid: true },
-//   { id: 1, name: 'Health Insurance, CIGNA', dueDate: 1, autoPay: false, paid: false },
-//   { id: 2, name: 'Credit Card, Barclay', dueDate: 3, autoPay: false, paid: true },
-//   { id: 3, name: 'Phone, AT&T', dueDate: 4, autoPay: false, paid: true },
-//   { id: 4, name: 'HBO Now', dueDate: 8, autoPay: true, paid: false },
-//   { id: 5, name: 'Car Payment, Honda', dueDate: 13, autoPay: false, paid: false },
-//   { id: 6, name: 'Credit Card, Capital One', dueDate: 15, autoPay: false, paid: false },
-//   { id: 7, name: 'Internet, XFINITY', dueDate: 16, autoPay: false, paid: false },
-//   { id: 8, name: 'Netflix', dueDate: 16, autoPay: true, paid: false },
-//   { id: 9, name: 'Car Insurance, GEICO', dueDate: 23, autoPay: true, paid: false },
-//   { id: 10, name: 'Renter\'s Insurance, Assurant', dueDate: 23, autoPay: true, paid: false },
-//   { id: 11, name: 'Code School', dueDate: 25, autoPay: true, paid: false }
-// ];
-
 // Utilities
-function slugify(string) {
-  return string
-          .toLowerCase()
-          .replace(/[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g, '')
-          .replace(/ /g, '-');
-}
-
 function addNewBill(autoPay, dueDate, name, paid) {
-  let slugifiedName = slugify(name);
-  db.ref(slugifiedName).set({
+  db.ref(name).set({
     name,
     autoPay,
     dueDate,
@@ -120,7 +84,9 @@ class Bill extends React.Component {
   }
 
   togglePaid() {
-    this.setState({ paid: !this.state.paid });
+    let paid = !this.state.paid;
+    this.setState({ paid: paid });
+    db.ref(this.props.name).update({ paid });
   }
 
   render() {
