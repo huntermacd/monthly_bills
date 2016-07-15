@@ -10,13 +10,13 @@ function addNewBill(autoPay, dueDate, name, paid) {
     name,
     autoPay,
     dueDate,
-    paid
+    paid: false
   });
 }
 
 // Test addNewBill
-// addNewBill(false, 1, 'Rent, Arthur Properties LLC', true);
-// addNewBill(false, 1, 'qwerty', true);
+// addNewBill(false, 1, 'Rent, Arthur Properties LLC');
+// addNewBill(false, 1, 'qwerty');
 
 // Components
 class BillsList extends React.Component {
@@ -45,20 +45,25 @@ class BillsList extends React.Component {
     // with one of each unique date
     let dates = Array.from(new Set(bills.map(item => item.dueDate)));
     return (
-      <div className='billsList'>
-        <h1>Bills for { moment().format('MMMM YYYY') }</h1>
-        {
-          dates.map(date => {
-            return (
-              <DateContainer
-                date={ date }
-                key={`${ date }-container`}
-                bills={ bills }
-                updateBills={ this.fetchBills.bind(this) }
-              />
-            )
-          })
-        }
+      <div>
+        <div className='billsList'>
+          <h1>Bills for { moment().format('MMMM YYYY') }</h1>
+          {
+            dates.map(date => {
+              return (
+                <DateContainer
+                  date={ date }
+                  key={`${ date }-container`}
+                  bills={ bills }
+                  updateBills={ this.fetchBills.bind(this) }
+                />
+              )
+            })
+          }
+        </div>
+        <div className='addBillForm'>
+          <AddBillForm updateBills={ this.fetchBills.bind(this) } />
+        </div>
       </div>
     );
   }
@@ -130,8 +135,58 @@ class Bill extends React.Component {
 }
 
 class AddBillForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { name: 'Default Bill Name', dueDate: 1, autoPay: false };
+  }
+
   render() {
-    return <h3>A form</h3>
+    let { updateBills } = this.props;
+    return (
+      <form>
+        <div>
+          <label htmlFor='bill-name'>Bill Name</label>
+          <input
+            type='text'
+            id='bill-name'
+            placeholder='(ex. "Utilities, Energy Co.")'
+            onChange={ (event) => this.setState({ name: event.target.value }) }
+          />
+        </div>
+        <div>
+          <label htmlFor='due-date'>Day of Month Due</label>
+          <input
+            type='text'
+            id='due-date'
+            placeholder='(ex. 1, 3, 8)'
+            onChange={ (event) => this.setState({ dueDate: parseInt(event.target.value) }) }
+          />
+        </div>
+        <div>
+          <label>Is this bill setup for auto pay?</label>
+          <input
+            type='radio'
+            name='auto-pay'
+            value='Yes'
+            onChange={ (event) => this.setState({ autoPay: true }) }
+          />
+          <input
+            type='radio'
+            name='auto-pay'
+            value='No'
+            onChange={ (event) => this.setState({ autoPay: false }) }
+          />
+        </div>
+        <input
+          type='submit'
+          onClick={ () => {
+            addNewBill(this.state.autoPay, this.state.dueDate, this.state.name);
+            updateBills();
+          } }
+          value='Add Bill'
+        />
+      </form>
+    );
   }
 }
 
