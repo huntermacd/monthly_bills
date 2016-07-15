@@ -16,6 +16,7 @@ function addNewBill(autoPay, dueDate, name, paid) {
 
 // Test addNewBill
 // addNewBill(false, 1, 'Rent, Arthur Properties LLC', true);
+// addNewBill(false, 1, 'qwerty', true);
 
 // Components
 class BillsList extends React.Component {
@@ -25,8 +26,16 @@ class BillsList extends React.Component {
   }
 
   componentWillMount() {
+    this.fetchBills();
+  }
+
+  fetchBills() {
     db.ref().once('value').then(snapshot => {
-      this.setState({ bills: Object.keys(snapshot.val()).map(item => snapshot.val()[item]) });
+      if (snapshot.val() != null) {
+        this.setState({ bills: Object.keys(snapshot.val()).map(item => snapshot.val()[item]) });
+      } else {
+        this.setState({ bills: [] });
+      }
     });
   }
 
@@ -41,7 +50,12 @@ class BillsList extends React.Component {
         {
           dates.map(date => {
             return (
-              <DateContainer date={ date } key={`${ date }-container`} bills={ bills } />
+              <DateContainer
+                date={ date }
+                key={`${ date }-container`}
+                bills={ bills }
+                updateBills={ this.fetchBills.bind(this) }
+              />
             )
           })
         }
@@ -52,7 +66,7 @@ class BillsList extends React.Component {
 
 class DateContainer extends React.Component {
   render() {
-    let { bills } = this.props;
+    let { bills, updateBills } = this.props;
     let calculatedDate = moment().startOf('month').add(`${ this.props.date - 1 }`, 'days').format('Do').toString();
     return (
       <div className='dateContainer'>
@@ -67,6 +81,7 @@ class DateContainer extends React.Component {
                   paid={ bill.paid }
                   key={ `${ bill.name }-bill` }
                   bills={ bills }
+                  updateBills={ updateBills }
                 />
               );
             }
@@ -89,7 +104,12 @@ class Bill extends React.Component {
     db.ref(this.props.name).update({ paid });
   }
 
+  removeBill() {
+    db.ref(this.props.name).remove();
+  }
+
   render() {
+    let { bills, updateBills } = this.props;
     return (
       <div className='bill'>
         <p>{ this.props.name }</p>
@@ -98,6 +118,12 @@ class Bill extends React.Component {
           onChange={ this.togglePaid.bind(this) }
           defaultChecked={ this.state.paid }
         />
+        <a href='#' onClick={ () => {
+          this.removeBill();
+          updateBills();
+        } }>
+          remove
+        </a>
       </div>
     );
   }
