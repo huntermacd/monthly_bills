@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 const db = firebase.database();
 
-class Bill extends React.Component {
+class Bill extends Component {
   constructor(props) {
     super(props);
     this.state = { paid: this.props.paid }

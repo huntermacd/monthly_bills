@@ -5,7 +5,7 @@ import DateContainer from './DateContainer';
 
 const db = firebase.database();
 
-class BillsList extends React.Component {
+class BillsList extends Component {
   constructor(props) {
     super(props);
     this.state = { bills: [] };

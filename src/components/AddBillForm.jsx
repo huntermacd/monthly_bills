@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 const db = firebase.database();
 
-class AddBillForm extends React.Component {
+class AddBillForm extends Component {
   constructor(props) {
     super(props);
     this.state = { name: 'Default Bill Name', dueDate: 1, autoPay: false };

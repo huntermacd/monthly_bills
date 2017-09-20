@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import Bill from './Bill';
 
-class DateContainer extends React.Component {
+class DateContainer extends Component {
   render() {
     let { bills, updateBills } = this.props;
     let calculatedDate = moment().startOf('month').add(`${ this.props.date - 1 }`, 'days').format('Do').toString();
