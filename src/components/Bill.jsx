@@ -1,6 +1,23 @@
 import React, { Component } from 'react';
+import { css } from 'emotion';
 
 const db = firebase.database();
+
+const billStyles = css`
+  background-color: white;
+  border-top: 1px solid rebeccapurple;
+  padding: 10px;
+
+  & label {
+    margin-right: 5px;
+  }
+
+  & .remove {
+    color: blue;
+    float: right;
+    margin: 0;
+  }
+`;
 
 class Bill extends Component {
   constructor(props) {
@@ -21,7 +38,7 @@ class Bill extends Component {
   render() {
     let { bills, updateBills } = this.props;
     return (
-      <div className='bill'>
+      <div className={billStyles}>
         <p>{ this.props.name }</p>
         <label>Paid?</label>
         <input

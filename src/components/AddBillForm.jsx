@@ -1,6 +1,51 @@
 import React, { Component } from 'react';
+import { css } from 'emotion';
 
 const db = firebase.database();
+
+const addBillFormStyles = css`
+  background-color: thistle;
+  padding: 15px;
+
+  & h2 {
+    text-align: center;
+  }
+
+  & form {
+    margin: 10px auto;
+    max-width: 320px;
+  }
+
+  & .field {
+    margin: 20px 0;
+  }
+
+  & label {
+    background-color: white;
+    display: inline-block;
+    padding: 10px;
+  }
+
+  & input {
+    border: 1px solid rebeccapurple;
+    box-sizing: border-box;
+    margin: 10px 0;
+    padding: 5px;
+    width: 100%;
+  }
+
+  & input[type=radio]{
+    width: auto;
+  }
+
+  & .radios {
+    margin-top: 10px;
+  }
+
+  & .radios input:nth-of-type(2) {
+    margin-left: 25px;
+  }
+`;
 
 class AddBillForm extends Component {
   constructor(props) {
@@ -20,7 +65,7 @@ class AddBillForm extends Component {
   render() {
     let { updateBills } = this.props;
     return (
-      <div>
+      <div className={addBillFormStyles}>
         <h2>Add New Bill</h2>
         <form>
           <div className='field'>

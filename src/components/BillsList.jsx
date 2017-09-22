@@ -2,8 +2,15 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import AddBillForm from './AddBillForm';
 import DateContainer from './DateContainer';
+import { css } from 'emotion';
 
 const db = firebase.database();
+
+const billsListStyles = css`
+  & h1 {
+    text-align: center;
+  }
+`;
 
 class BillsList extends Component {
   constructor(props) {
@@ -40,7 +47,7 @@ class BillsList extends Component {
     let dates = Array.from(new Set(bills.map(item => item.dueDate)));
     return (
       <div>
-        <div className='billsList'>
+        <div className={billsListStyles}>
           <h1>Bills for { moment().format('MMMM YYYY') }</h1>
           {
             dates.map(date => {
